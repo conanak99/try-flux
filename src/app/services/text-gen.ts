@@ -52,21 +52,18 @@ export const translate = async (text: string) => {
       model,
     });
 
-    const translatedText = result.choices[0].message.content
-      ?.replaceAll("Here is the translation", "")
-      ?.replaceAll("here is the translation", "")
-      ?.replaceAll("`", "")
-      ?.trim();
+    const translatedText =
+      result.choices[0].message.content
+        ?.replaceAll("Here is the translation", "")
+        ?.replaceAll("here is the translation", "")
+        ?.replaceAll("`", "")
+        ?.trim() ?? text;
 
-    console.log({
-      text,
-      translatedText,
-      model,
-    });
-
-    return translatedText;
+    return { translatedText, model };
   } catch (error) {
-    console.error(error, apiKey);
+    // console.error(error, apiKey);
     throw error;
   }
 };
+
+export type TranslateResult = Awaited<ReturnType<typeof translate>>;

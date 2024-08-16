@@ -5,7 +5,7 @@ import retry from "async-await-retry";
 import { RateLimiterRes } from "rate-limiter-flexible";
 
 import { imgGenService } from "@/app/services/img-gen";
-import { translate } from "@/app/services/text-gen";
+import { translate, TranslateResult } from "@/app/services/text-gen";
 import { limiter } from "@/app/services/rate-limit";
 
 function IP() {
@@ -26,22 +26,25 @@ export async function generateImage(prompt: string) {
   try {
     await limiter.consume(ipAddress, 1);
 
-    const translatedPrompt = await retry(() => translate(prompt), undefined, {
-      retriesMax: 3,
-      interval: 1000,
-      exponential: true,
-    });
+    const translateResult: TranslateResult = (await retry(
+      () => translate(prompt),
+      undefined,
+      {
+        retriesMax: 4,
+        interval: 1000,
+        exponential: true,
+      }
+    )) || { translatedText: prompt, model: "unknown" };
 
-    const imgUrl = await imgGenService.callAPI(translatedPrompt ?? prompt);
+    const imgUrl = await imgGenService.callAPI(translateResult.translatedText);
 
     console.log({
       prompt,
-      translatedPrompt,
+      translateResult,
       imgUrl,
     });
 
     return {
-      translatedPrompt,
       imgUrl,
     };
   } catch (e: any) {
@@ -53,14 +56,12 @@ export async function generateImage(prompt: string) {
         error: `Bạn có thể tạo tối đa 5 ảnh mỗi phút. Thử lại sau ${(
           res.msBeforeNext / 1000
         ).toFixed(0)} giây nha!`,
-        translatedPrompt: null,
         imgUrl: null,
       };
     }
 
     return {
-      error: e,
-      translatedPrompt: null,
+      error: JSON.stringify(e),
       imgUrl: null,
     };
   }
