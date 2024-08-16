@@ -46,17 +46,17 @@ export async function generateImage(prompt: string) {
       imgUrl,
     };
   } catch (e: any) {
-    // if (e instanceof String) {
-    //   console.error({
-    //     ipAddress,
-    //     prompt,
-    //     error: e,
-    //   });
-    //   return {
-    //     error: e,
-    //     imgUrl: null,
-    //   };
-    // }
+    if (typeof e === "string") {
+      console.error({
+        ipAddress,
+        prompt,
+        error: e,
+      });
+      return {
+        error: e,
+        imgUrl: null,
+      };
+    }
 
     if ("msBeforeNext" in e) {
       console.warn(`Rate limit exceeded for ${ipAddress}!`);
