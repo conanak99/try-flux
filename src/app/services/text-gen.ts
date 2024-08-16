@@ -36,8 +36,10 @@ ${input}
 """
 `;
 
-export const translateText = async (text: string) => {
+export const translate = async (text: string) => {
   const apiKey = getKey();
+  const model = getModel();
+
   const groq = new Groq({ apiKey });
 
   try {
@@ -48,10 +50,17 @@ export const translateText = async (text: string) => {
           content: getPrompt(text),
         },
       ],
-      model: getModel(),
+      model,
     });
 
-    return result.choices[0].message.content?.trim();
+    const translatedText = result.choices[0].message.content?.trim();
+
+    console.log({
+      translatedText,
+      model,
+    });
+
+    return translatedText;
   } catch (error) {
     console.error(error, apiKey);
     throw error;

@@ -5,7 +5,7 @@ import retry from "async-await-retry";
 import { RateLimiterRes } from "rate-limiter-flexible";
 
 import { imgGenService } from "@/app/services/img-gen";
-import { translateText } from "@/app/services/text-gen";
+import { translate } from "@/app/services/text-gen";
 import { limiter } from "@/app/services/rate-limit";
 
 function IP() {
@@ -26,15 +26,11 @@ export async function generateImage(prompt: string) {
   try {
     await limiter.consume(ipAddress, 1);
 
-    const translatedPrompt = await retry(
-      () => translateText(prompt),
-      undefined,
-      {
-        retriesMax: 3,
-        interval: 1000,
-        exponential: true,
-      }
-    );
+    const translatedPrompt = await retry(() => translate(prompt), undefined, {
+      retriesMax: 3,
+      interval: 1000,
+      exponential: true,
+    });
 
     const imgUrl = await imgGenService.callAPI(translatedPrompt ?? prompt);
 
