@@ -1,6 +1,7 @@
 "use server";
 
 import { headers } from "next/headers";
+import retry from "async-await-retry";
 import { RateLimiterRes } from "rate-limiter-flexible";
 
 import { imgGenService } from "@/app/services/img-gen";
@@ -25,8 +26,17 @@ export async function generateImage(prompt: string) {
   try {
     await limiter.consume(ipAddress, 1);
 
-    const translatedPrompt = (await translateText(prompt)) ?? prompt;
-    const imgUrl = await imgGenService.callAPI(translatedPrompt);
+    const translatedPrompt = await retry(
+      () => translateText(prompt),
+      undefined,
+      {
+        retriesMax: 3,
+        interval: 1000,
+        exponential: true,
+      }
+    );
+
+    const imgUrl = await imgGenService.callAPI(translatedPrompt ?? prompt);
 
     console.log({
       prompt,

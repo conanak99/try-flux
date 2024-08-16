@@ -52,6 +52,6 @@ export const translateText = async (text: string) => {
     return result.choices[0].message.content?.trim();
   } catch (error) {
     console.error(error, apiKey);
-    return undefined;
+    throw error;
   }
 };
