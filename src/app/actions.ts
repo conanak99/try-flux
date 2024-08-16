@@ -21,7 +21,6 @@ function IP() {
 
 export async function generateImage(prompt: string) {
   const ipAddress = IP();
-  console.log("IP Address: ", ipAddress);
 
   try {
     await limiter.consume(ipAddress, 1);
@@ -39,6 +38,7 @@ export async function generateImage(prompt: string) {
     const imgUrl = await imgGenService.callAPI(translateResult.translatedText);
 
     console.log({
+      ipAddress,
       prompt,
       translateResult,
       imgUrl,
@@ -49,7 +49,7 @@ export async function generateImage(prompt: string) {
     };
   } catch (e: any) {
     if ("msBeforeNext" in e) {
-      console.warn(`Rate limit exceeded for ${ipAddress}`);
+      console.warn(`Rate limit exceeded for ${ipAddress}!`);
       const res: RateLimiterRes = e as RateLimiterRes;
 
       return {
