@@ -28,6 +28,11 @@ export async function generateImage(prompt: string) {
     const translatedPrompt = (await translateText(prompt)) ?? prompt;
     const imgUrl = await imgGenService.callAPI(translatedPrompt);
 
+    console.log({
+      translatedPrompt,
+      imgUrl,
+    });
+
     return {
       translatedPrompt,
       imgUrl,
