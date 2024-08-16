@@ -7,6 +7,7 @@ import { RateLimiterRes } from "rate-limiter-flexible";
 import { imgGenService } from "@/app/services/img-gen";
 import { translate, TranslateResult } from "@/app/services/text-gen";
 import { limiter } from "@/app/services/rate-limit";
+import { retryFunc } from "@/app/services/helper";
 
 function IP() {
   const FALLBACK_IP_ADDRESS = "0.0.0.0";
@@ -25,17 +26,14 @@ export async function generateImage(prompt: string) {
   try {
     await limiter.consume(ipAddress, 1);
 
-    const translateResult: TranslateResult = (await retry(
-      () => translate(prompt),
-      undefined,
-      {
-        retriesMax: 4,
-        interval: 1000,
-        exponential: true,
-      }
-    )) || { translatedText: prompt, model: "unknown" };
+    const translateResult = (await retryFunc(() => translate(prompt))) || {
+      translatedText: prompt,
+      model: "unknown",
+    };
 
-    const imgUrl = await imgGenService.callAPI(translateResult.translatedText);
+    const imgUrl = await retryFunc(() =>
+      imgGenService.callAPI(translateResult.translatedText)
+    );
 
     console.log({
       ipAddress,
@@ -48,6 +46,18 @@ export async function generateImage(prompt: string) {
       imgUrl,
     };
   } catch (e: any) {
+    if (e instanceof String) {
+      console.error({
+        ipAddress,
+        prompt,
+        error: e,
+      });
+      return {
+        error: e,
+        imgUrl: null,
+      };
+    }
+
     if ("msBeforeNext" in e) {
       console.warn(`Rate limit exceeded for ${ipAddress}!`);
       const res: RateLimiterRes = e as RateLimiterRes;
