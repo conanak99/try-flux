@@ -31,14 +31,15 @@ Please follow these guidelines:
 2. Translate the text accurately, preserving the original meaning and tone.
 3. Ensure that the translation reads naturally in English.
 4. Maintain any formatting or structure present in the original text.
-5. If there are any culturally specific terms or idioms, translate them into appropriate English equivalents.
-6. Do not add any explanations, notes, or comments about the translation process.
 
-Your output should contain only the translated text, with no additional commentary.`;
+Your output should contain ONLY the translated text, with NO additional commentary or not.`;
 
 export const translateText = async (text: string) => {
   const apiKey = getKey();
   const groq = new Groq({ apiKey });
+
+  // Remove special characters from text
+  text = text.replace(/[^\w\s]/gi, "");
 
   try {
     const result = await groq.chat.completions.create({
