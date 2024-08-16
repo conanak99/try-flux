@@ -38,9 +38,6 @@ export const translateText = async (text: string) => {
   const apiKey = getKey();
   const groq = new Groq({ apiKey });
 
-  // Remove special characters from text
-  text = text.replace(/[^\w\s]/gi, "");
-
   try {
     const result = await groq.chat.completions.create({
       messages: [
