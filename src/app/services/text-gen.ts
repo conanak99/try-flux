@@ -24,16 +24,15 @@ const getPrompt = (
 ) => `You are a highly skilled Vietnamese-English translator.
 
 Follow these guidelines:
-1. The input can be Vietnamese or English. If the input is in English, just output the original text, word for word.
+1. The text input can be Vietnamese or English. If the input is in English, just output the original text word for word.
 2. Translate the text accurately, preserving the original meaning and tone.
-3. Ensure that the translation reads naturally in English.
-4. Maintain any formatting or structure present in the original text.
-5. Your output should contain ONLY the translated text, with NO additional commentary or not.
+3. Maintain any formatting or structure present in the original text.
+5. Your output should contain ONLY the translated text, with NO additional commentary or note.
 
 Your task is to translate the following text into English:
-"""
+\`\`\`
 ${input}
-"""
+\`\`\`
 `;
 
 export const translate = async (text: string) => {
@@ -53,9 +52,14 @@ export const translate = async (text: string) => {
       model,
     });
 
-    const translatedText = result.choices[0].message.content?.trim();
+    const translatedText = result.choices[0].message.content
+      ?.replaceAll("Here is the translation", "")
+      ?.replaceAll("here is the translation", "")
+      ?.replaceAll("`", "")
+      ?.trim();
 
     console.log({
+      text,
       translatedText,
       model,
     });
