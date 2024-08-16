@@ -37,7 +37,9 @@ Please follow these guidelines:
 Your output should contain only the translated text, with no additional commentary.`;
 
 export const translateText = async (text: string) => {
-  const groq = new Groq({ apiKey: getKey() });
+  const apiKey = getKey();
+  const groq = new Groq({ apiKey });
+
   try {
     const result = await groq.chat.completions.create({
       messages: [
@@ -51,7 +53,7 @@ export const translateText = async (text: string) => {
 
     return result.choices[0].message.content?.trim();
   } catch (error) {
-    console.error(error);
+    console.error(error, apiKey);
     return undefined;
   }
 };

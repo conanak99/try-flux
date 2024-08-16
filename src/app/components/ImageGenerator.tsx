@@ -11,14 +11,14 @@ const ImageGenerator = () => {
 
   const generateImage = async () => {
     if (prompt.trim() === "") return;
+    if (isLoading) return;
 
     setIsLoading(true);
+    const { translatedPrompt, imgUrl, error } = await genImg(prompt);
+    console.log({ translatedPrompt, imgUrl, error });
 
-    const { translatedPrompt, imgUrl } = await genImg(prompt);
-    console.log({ translatedPrompt, imgUrl });
-
-    if (!imgUrl) {
-      setError("Failed to generate image. Try again!");
+    if (error || !imgUrl) {
+      setError(error ?? "Thử lại nha bạn ei!!!");
       setIsLoading(false);
       return;
     }
@@ -57,6 +57,7 @@ const ImageGenerator = () => {
       </div>
       <button
         onClick={generateImage}
+        disabled={isLoading}
         className="w-full rounded-md bg-blue-500 px-4 py-2 text-white transition duration-300 hover:bg-blue-600"
       >
         Tạo ảnh
@@ -101,7 +102,7 @@ const ImageGenerator = () => {
         </p>
 
         <p className="block mt-4">
-          <p className="text-base">
+          <span className="text-base">
             Powered by{" "}
             <a
               href="https://runware.ai/"
@@ -111,7 +112,7 @@ const ImageGenerator = () => {
             >
               Runware.ai
             </a>
-          </p>
+          </span>
         </p>
       </div>
     </div>
