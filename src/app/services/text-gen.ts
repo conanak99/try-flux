@@ -21,18 +21,20 @@ const getModel = () => {
 
 const getPrompt = (
   input: string
-) => `You are a highly skilled translator. Your task is to translate the following text into English as a prompt:
-<text_to_translate>
-${input}
-</text_to_translate>
+) => `You are a highly skilled Vietnamese-English translator.
 
-Please follow these guidelines:
+Follow these guidelines:
 1. The input can be Vietnamese or English. If the input is in English, just output the original text, word for word.
 2. Translate the text accurately, preserving the original meaning and tone.
 3. Ensure that the translation reads naturally in English.
 4. Maintain any formatting or structure present in the original text.
+5. Your output should contain ONLY the translated text, with NO additional commentary or not.
 
-Your output should contain ONLY the translated text, with NO additional commentary or not.`;
+Your task is to translate the following text into English:
+"""
+${input}
+"""
+`;
 
 export const translateText = async (text: string) => {
   const apiKey = getKey();
