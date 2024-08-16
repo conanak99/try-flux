@@ -19,8 +19,10 @@ async function callAPI(prompt: string) {
 
   const response = await runware.requestImages({
     positivePrompt: prompt,
-    height: 1024,
-    width: 768,
+    // height: 1024,
+    // width: 768,
+    height: 640,
+    width: 1024,
     model: "runware:100@1",
     // steps: 30,
     // numberResults: 1,
