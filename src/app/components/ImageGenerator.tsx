@@ -27,7 +27,7 @@ const ImageGenerator = () => {
   };
 
   return (
-    <div className="mt-6 max-w-full rounded-lg bg-white">
+    <div className="mt-6 max-w-full rounded-lg bg-white px-4">
       <div className="max-w-xl mx-auto">
         <h2 className="mb-4 text-center text-xl font-bold">
           Tạo ảnh với Flux cùng Code Dạo
