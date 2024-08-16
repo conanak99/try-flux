@@ -40,7 +40,7 @@ export async function generateImage(prompt: string) {
     };
   } catch (e: any) {
     if ("msBeforeNext" in e) {
-      console.warn("Rate limit exceeded");
+      console.warn(`Rate limit exceeded for ${ipAddress}`);
       const res: RateLimiterRes = e as RateLimiterRes;
 
       return {
