@@ -14,11 +14,13 @@ const ImageGenerator = () => {
     if (isLoading) return;
 
     setIsLoading(true);
-    const { imgUrl, error } = await genImg(prompt);
-    console.log({ imgUrl, error });
+    setError("");
 
-    if (error || !imgUrl) {
-      setError(error ?? "Lâu lâu bị lỗi. Thử lại nha bạn ei!!!");
+    const { imgUrl, error: genError } = await genImg(prompt);
+    console.log({ imgUrl, genError });
+
+    if (genError || !imgUrl) {
+      setError(genError ?? "Lâu lâu bị lỗi. Thử lại nha bạn ei!!!");
       setIsLoading(false);
       return;
     }
