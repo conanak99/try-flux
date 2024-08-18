@@ -1,11 +1,10 @@
 "use server";
 
 import { headers } from "next/headers";
-import retry from "async-await-retry";
 import { RateLimiterRes } from "rate-limiter-flexible";
 
 import { imgGenService } from "@/app/services/img-gen";
-import { translate, TranslateResult } from "@/app/services/text-gen";
+import { translate } from "@/app/services/text-gen";
 import { limiter } from "@/app/services/rate-limit";
 import { retryFunc } from "@/app/services/helper";
 

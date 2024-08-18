@@ -1,3 +1,4 @@
+import { bento } from "@/app/services/cache";
 import { config } from "@/config";
 import Groq from "groq-sdk";
 
@@ -35,7 +36,7 @@ ${input}
 \`\`\`
 `;
 
-export const translate = async (text: string) => {
+export const _translate = async (text: string) => {
   const apiKey = getKey();
   const model = getModel();
 
@@ -66,4 +67,10 @@ export const translate = async (text: string) => {
   }
 };
 
-export type TranslateResult = Awaited<ReturnType<typeof translate>>;
+export const translate = async (text: string) => {
+  const key = `translate:${text.toLowerCase().trim()}`;
+
+  return bento.getOrSet(key, async () => await _translate(text), {
+    ttl: "10m", // Cache translated text for 10 minutes
+  });
+};
