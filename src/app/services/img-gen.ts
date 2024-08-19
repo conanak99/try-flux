@@ -1,8 +1,8 @@
 import { config } from "@/config";
-import { Runware } from "@runware/sdk-js";
+import { RunwareServer } from "@runware/sdk-js";
 import delay from "delay";
 
-const runware = new Runware({
+const runware = new RunwareServer({
   apiKey: config.runwareApiKey,
 });
 
@@ -10,6 +10,8 @@ let initialized = false;
 
 async function init() {
   if (initialized) return;
+
+  // Lol fake delay to wait for websocket to be initialized
   await delay(2000);
   initialized = true;
 }
