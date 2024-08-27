@@ -16,19 +16,34 @@ async function init() {
   initialized = true;
 }
 
-async function callAPI(prompt: string) {
+async function callAPI(prompt: string, imageSize: string) {
   await init();
+
+  let width, height;
+
+  switch (imageSize) {
+    case 'square':
+      width = 640;
+      height = 640;
+      break;
+    case 'rectangle':
+      width = 1024;
+      height = 512;
+      break;
+    case 'portrait':
+      width = 512;
+      height = 1024;
+      break;
+    default:
+      width = 1024;
+      height = 1024;
+  }
 
   const response = await runware.requestImages({
     positivePrompt: prompt,
-    // height: 1024,
-    // width: 768,
-    height: 640,
-    width: 1024,
+    width,
+    height,
     model: "runware:100@1",
-    // steps: 30,
-    // numberResults: 1,
-    // clipSkip: 1,
   });
 
   return response?.[0].imageURL;

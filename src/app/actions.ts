@@ -19,25 +19,33 @@ function IP() {
   return headers().get("x-real-ip") ?? FALLBACK_IP_ADDRESS;
 }
 
-export async function generateImage(prompt: string) {
+export async function generateImage(prompt: string, imageSize: string, translatePrompt: boolean) {
   const ipAddress = IP();
 
   try {
     await limiter.consume(ipAddress, 1);
 
-    const translateResult = (await retryFunc(() => translate(prompt))) || {
-      translatedText: prompt,
-      model: "unknown",
-    };
+    let translatedPrompt = prompt;
+    let translationModel = "none";
+
+    if (translatePrompt) {
+      const translateResult = (await retryFunc(() => translate(prompt))) || {
+        translatedText: prompt,
+        model: "unknown",
+      };
+      translatedPrompt = translateResult.translatedText;
+      translationModel = translateResult.model;
+    }
 
     const imgUrl = await retryFunc(() =>
-      imgGenService.callAPI(translateResult.translatedText)
+      imgGenService.callAPI(translatedPrompt, imageSize)
     );
 
     console.log({
       ipAddress,
       prompt,
-      translateResult,
+      translatedPrompt,
+      translationModel,
       imgUrl,
     });
 

@@ -8,6 +8,8 @@ const ImageGenerator = () => {
   const [error, setError] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [imageSize, setImageSize] = useState("square"); // Add this line
+  const [translatePrompt, setTranslatePrompt] = useState(true); // Add this line
 
   const generateImage = async () => {
     if (prompt.trim() === "") return;
@@ -16,7 +18,11 @@ const ImageGenerator = () => {
     setIsLoading(true);
     setError("");
 
-    const { imgUrl, error: genError } = await genImg(prompt);
+    const { imgUrl, error: genError } = await genImg(
+      prompt,
+      imageSize,
+      translatePrompt
+    );
     console.log({ imgUrl, genError });
 
     if (genError || !imgUrl) {
@@ -57,6 +63,57 @@ const ImageGenerator = () => {
             placeholder="Describe the image you want to generate"
             className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Chọn kích thước ảnh:
+          </label>
+          <div className="flex space-x-4">
+            <label className="inline-flex items-center">
+              <input
+                type="radio"
+                className="form-radio"
+                name="imageSize"
+                value="square"
+                checked={imageSize === "square"}
+                onChange={(e) => setImageSize(e.target.value)}
+              />
+              <span className="ml-2">Vuông</span>
+            </label>
+            <label className="inline-flex items-center">
+              <input
+                type="radio"
+                className="form-radio"
+                name="imageSize"
+                value="rectangle"
+                checked={imageSize === "rectangle"}
+                onChange={(e) => setImageSize(e.target.value)}
+              />
+              <span className="ml-2">Chữ nhật</span>
+            </label>
+            <label className="inline-flex items-center">
+              <input
+                type="radio"
+                className="form-radio"
+                name="imageSize"
+                value="portrait"
+                checked={imageSize === "portrait"}
+                onChange={(e) => setImageSize(e.target.value)}
+              />
+              <span className="ml-2">Dọc</span>
+            </label>
+          </div>
+        </div>
+        <div className="mb-4">
+          <label className="inline-flex items-center">
+            <input
+              type="checkbox"
+              className="form-checkbox"
+              checked={translatePrompt}
+              onChange={(e) => setTranslatePrompt(e.target.checked)}
+            />
+            <span className="ml-2">Dịch prompt sang tiếng Anh</span>
+          </label>
         </div>
         <button
           onClick={generateImage}
