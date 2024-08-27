@@ -2,14 +2,15 @@
 
 import { useState } from "react";
 import { generateImage as genImg } from "@/app/actions";
+import Link from "next/link";
 
 const ImageGenerator = () => {
   const [prompt, setPrompt] = useState("");
   const [error, setError] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [imageSize, setImageSize] = useState("square"); // Add this line
-  const [translatePrompt, setTranslatePrompt] = useState(true); // Add this line
+  const [imageSize, setImageSize] = useState("square");
+  const [translatePrompt, setTranslatePrompt] = useState(true);
 
   const generateImage = async () => {
     if (prompt.trim() === "") return;
@@ -161,6 +162,16 @@ const ImageGenerator = () => {
           </a>{" "}
           nha!
         </p>
+
+        <div className="max-w-xl mx-auto text-center my-4">
+          <Link
+            href="/gallery"
+            target="_blank"
+            className="text-blue-500 hover:underline inline-block"
+          >
+            Xem Gallery ảnh
+          </Link>
+        </div>
 
         <p className="block mt-4">
           <span className="text-base">

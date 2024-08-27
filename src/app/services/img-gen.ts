@@ -16,28 +16,23 @@ async function init() {
   initialized = true;
 }
 
+const getImageDimensions = (imageSize: string): { width: number; height: number } => {
+  switch (imageSize) {
+    case 'square':
+      return { width: 640, height: 640 };
+    case 'rectangle':
+      return { width: 1024, height: 512 };
+    case 'portrait':
+      return { width: 512, height: 1024 };
+    default:
+      return { width: 1024, height: 1024 };
+  }
+};
+
 async function callAPI(prompt: string, imageSize: string) {
   await init();
 
-  let width, height;
-
-  switch (imageSize) {
-    case 'square':
-      width = 640;
-      height = 640;
-      break;
-    case 'rectangle':
-      width = 1024;
-      height = 512;
-      break;
-    case 'portrait':
-      width = 512;
-      height = 1024;
-      break;
-    default:
-      width = 1024;
-      height = 1024;
-  }
+  const { width, height } = getImageDimensions(imageSize);
 
   const response = await runware.requestImages({
     positivePrompt: prompt,

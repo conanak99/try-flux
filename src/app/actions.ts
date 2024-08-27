@@ -2,6 +2,7 @@
 
 import { headers } from "next/headers";
 import { RateLimiterRes } from "rate-limiter-flexible";
+import { imageStore } from "@/app/services/image-store";
 
 import { imgGenService } from "@/app/services/img-gen";
 import { translate } from "@/app/services/text-gen";
@@ -40,6 +41,9 @@ export async function generateImage(prompt: string, imageSize: string, translate
     const imgUrl = await retryFunc(() =>
       imgGenService.callAPI(translatedPrompt, imageSize)
     );
+
+    // Add this line to store the generated image
+    imageStore.addImage(imgUrl!, prompt);
 
     console.log({
       ipAddress,
