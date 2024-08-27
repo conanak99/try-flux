@@ -29,7 +29,7 @@ export default async function GalleryPage() {
             <img
               src={getImageUrl(image.image)}
               alt={image.prompt}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain object-top"
             />
             <div className="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white p-1 text-xs max-w-[90%] line-clamp-4 cursor-pointer">
               {image.prompt}
