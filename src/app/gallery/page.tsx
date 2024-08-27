@@ -31,7 +31,7 @@ export default async function GalleryPage() {
               alt={image.prompt}
               className="w-full h-full object-contain object-top"
             />
-            <div className="absolute top-2 right-2 bg-black bg-opacity-50 text-white p-1 text-xs max-w-[80%] line-clamp-3">
+            <div className="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white p-1 text-xs max-w-[80%] line-clamp-3">
               {image.prompt}
             </div>
           </div>
