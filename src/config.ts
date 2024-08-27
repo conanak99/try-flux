@@ -6,4 +6,10 @@ loadEnvConfig(projectDir);
 export const config = {
   runwareApiKey: process.env.RUNWARE_API_KEY || "",
   groqApiKeys: process.env.GROQ_API_KEYS?.split(",") || [],
+  minio: {
+    endPoint: process.env.MINIO_ENDPOINT || "",
+    accessKey: process.env.MINIO_ACCESS_KEY || "",
+    secretKey: process.env.MINIO_SECRET_KEY || "",
+    bucketName: process.env.MINIO_BUCKET_NAME || "",
+  },
 };

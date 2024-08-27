@@ -8,6 +8,7 @@ import { translate } from "@/app/services/text-gen";
 import { limiter } from "@/app/services/rate-limit";
 import { retryFunc } from "@/app/services/helper";
 import { addImage } from "@/app/services/image-store";
+import { uploadToMinio } from "@/app/services/minio";
 
 function IP() {
   const FALLBACK_IP_ADDRESS = "0.0.0.0";
@@ -42,19 +43,28 @@ export async function generateImage(prompt: string, imageSize: string, translate
       imgGenService.callAPI(translatedPrompt, imageSize)
     );
 
-    // Add this line to store the generated image
-    addImage(imgUrl!, prompt);
+    if (imgUrl) {
+      // Add this line to store the generated image
+      uploadImageToMinio(imgUrl).then(minioUrl => {
+        addImage(minioUrl, prompt);
+      });
 
-    console.log({
-      ipAddress,
-      prompt,
-      translatedPrompt,
-      translationModel,
-      imgUrl,
-    });
+      console.log({
+        ipAddress,
+        prompt,
+        translatedPrompt,
+        translationModel,
+        imgUrl,
+      });
+
+      return {
+        imgUrl,
+      };
+    }
 
     return {
-      imgUrl,
+      error: "Failed to generate image",
+      imgUrl: null,
     };
   } catch (e: any) {
     if (typeof e === "string") {
@@ -86,4 +96,10 @@ export async function generateImage(prompt: string, imageSize: string, translate
       imgUrl: null,
     };
   }
+}
+
+async function uploadImageToMinio(imageUrl: string) {
+  const fileName = imageUrl.split('/').pop() || `${Date.now()}-${Math.random().toString(36).substring(7)}.png`;
+  const minioUrl = await uploadToMinio(imageUrl, fileName);
+  return minioUrl;
 }
