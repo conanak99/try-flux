@@ -4,6 +4,13 @@ import Link from "next/link";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
+const getImageUrl = (imageUrl: string) => {
+  if (imageUrl.startsWith("http")) {
+    return `//wsrv.nl/?url=${imageUrl}`;
+  }
+  return imageUrl;
+};
+
 export default async function GalleryPage() {
   const images = await getImages();
 
@@ -20,7 +27,7 @@ export default async function GalleryPage() {
         {images.map((image, index) => (
           <div key={index} className="relative aspect-square">
             <img
-              src={image.image}
+              src={getImageUrl(image.image)}
               alt={image.prompt}
               className="w-full h-full object-cover"
             />
