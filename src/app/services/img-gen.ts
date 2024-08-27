@@ -1,3 +1,4 @@
+import { ImageSize } from "@/app/types";
 import { config } from "@/config";
 import { RunwareServer } from "@runware/sdk-js";
 import delay from "delay";
@@ -16,16 +17,17 @@ async function init() {
   initialized = true;
 }
 
-const getImageDimensions = (imageSize: string): { width: number; height: number } => {
+const getImageDimensions = (
+  imageSize: ImageSize
+): { width: number; height: number } => {
   switch (imageSize) {
-    case 'square':
-      return { width: 640, height: 640 };
-    case 'rectangle':
+    case "landscape":
       return { width: 1024, height: 512 };
-    case 'portrait':
+    case "portrait":
       return { width: 512, height: 1024 };
+    case "square":
     default:
-      return { width: 1024, height: 1024 };
+      return { width: 640, height: 640 };
   }
 };
 

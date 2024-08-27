@@ -11,6 +11,16 @@ const getImageUrl = (imageUrl: string) => {
   return imageUrl;
 };
 
+const getImageRatio = (size: ImageSize) => {
+  switch (size) {
+    case "square":
+      return "aspect-square row-span-2";
+    case "portrait":
+      return "aspect-[1/2] row-span-4";
+    case "landscape":
+      return "aspect-[2/1] row-span-1";
+  }
+};
 export default async function GalleryPage() {
   const images = await getImages();
 
@@ -23,9 +33,12 @@ export default async function GalleryPage() {
       >
         Back to Image Generator
       </Link>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
         {images.map((image, index) => (
-          <div key={index} className="relative aspect-[3/4]">
+          <div
+            key={index}
+            className={`relative shadow-md ${getImageRatio(image.size)}`}
+          >
             <img
               src={getImageUrl(image.image)}
               alt={image.prompt}

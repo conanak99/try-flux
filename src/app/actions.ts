@@ -9,6 +9,7 @@ import { limiter } from "@/app/services/rate-limit";
 import { retryFunc } from "@/app/services/helper";
 import { addImage } from "@/app/services/image-store";
 import { uploadToMinio } from "@/app/services/minio";
+import { ImageSize } from "@/app/types";
 
 function IP() {
   const FALLBACK_IP_ADDRESS = "0.0.0.0";
@@ -21,7 +22,7 @@ function IP() {
   return headers().get("x-real-ip") ?? FALLBACK_IP_ADDRESS;
 }
 
-export async function generateImage(prompt: string, imageSize: string, translatePrompt: boolean) {
+export async function generateImage(prompt: string, imageSize: ImageSize, translatePrompt: boolean) {
   const ipAddress = IP();
 
   try {
@@ -46,7 +47,7 @@ export async function generateImage(prompt: string, imageSize: string, translate
     if (imgUrl) {
       // Add this line to store the generated image
       uploadImageToMinio(imgUrl).then(minioUrl => {
-        addImage(minioUrl, prompt);
+        addImage(minioUrl, prompt, imageSize);
       });
 
       console.log({

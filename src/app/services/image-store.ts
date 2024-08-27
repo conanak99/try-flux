@@ -1,10 +1,12 @@
+import { ImageSize } from "@/app/types";
 import { db, dbSchema } from "@/db";
 import { desc } from "drizzle-orm";
 
-export async function addImage(url: string, prompt: string) {
+export async function addImage(url: string, prompt: string, size: ImageSize) {
   await db.insert(dbSchema.history).values({
     prompt,
     image: url,
+    size,
   });
 }
 

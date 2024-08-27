@@ -3,13 +3,14 @@
 import { useState } from "react";
 import { generateImage as genImg } from "@/app/actions";
 import Link from "next/link";
+import { ImageSize } from "@/app/types";
 
 const ImageGenerator = () => {
   const [prompt, setPrompt] = useState("");
   const [error, setError] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [imageSize, setImageSize] = useState("square");
+  const [imageSize, setImageSize] = useState<ImageSize>("square");
   const [translatePrompt, setTranslatePrompt] = useState(true);
 
   const generateImage = async () => {
@@ -77,7 +78,7 @@ const ImageGenerator = () => {
                 name="imageSize"
                 value="square"
                 checked={imageSize === "square"}
-                onChange={(e) => setImageSize(e.target.value)}
+                onChange={(e) => setImageSize(e.target.value as ImageSize)}
               />
               <span className="ml-2">Vuông</span>
             </label>
@@ -86,11 +87,11 @@ const ImageGenerator = () => {
                 type="radio"
                 className="form-radio"
                 name="imageSize"
-                value="rectangle"
-                checked={imageSize === "rectangle"}
-                onChange={(e) => setImageSize(e.target.value)}
+                value="landscape"
+                checked={imageSize === "landscape"}
+                onChange={(e) => setImageSize(e.target.value as ImageSize)}
               />
-              <span className="ml-2">Chữ nhật</span>
+              <span className="ml-2">Ngang</span>
             </label>
             <label className="inline-flex items-center">
               <input
@@ -99,7 +100,7 @@ const ImageGenerator = () => {
                 name="imageSize"
                 value="portrait"
                 checked={imageSize === "portrait"}
-                onChange={(e) => setImageSize(e.target.value)}
+                onChange={(e) => setImageSize(e.target.value as ImageSize)}
               />
               <span className="ml-2">Dọc</span>
             </label>
