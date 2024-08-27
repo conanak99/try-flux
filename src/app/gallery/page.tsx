@@ -1,8 +1,11 @@
-import { imageStore } from "@/app/services/image-store";
+import { getImages } from "@/app/services/image-store";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function GalleryPage() {
-  const images = await imageStore.getImages();
+  const images = await getImages();
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -17,11 +20,11 @@ export default async function GalleryPage() {
         {images.map((image, index) => (
           <div key={index} className="relative aspect-square">
             <img
-              src={image.url}
+              src={image.image}
               alt={image.prompt}
               className="w-full h-full object-cover"
             />
-            <div className="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white p-1 text-xs max-w-[90%] truncate">
+            <div className="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white p-1 text-xs max-w-[90%] line-clamp-4 cursor-pointer">
               {image.prompt}
             </div>
           </div>

@@ -1,0 +1,1 @@
+ALTER TABLE `history` RENAME COLUMN `images` TO `image`;

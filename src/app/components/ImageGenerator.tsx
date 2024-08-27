@@ -131,7 +131,7 @@ const ImageGenerator = () => {
         )}
       </div>
 
-      <div className="relative mt-8 max-w-6xl mx-auto">
+      <div className="relative mt-8 max-w-2xl mx-auto">
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center rounded-md bg-gray-200 bg-opacity-75">
             <div className="flex aspect-square w-full items-center justify-center">
@@ -163,16 +163,6 @@ const ImageGenerator = () => {
           nha!
         </p>
 
-        <div className="max-w-xl mx-auto text-center my-4">
-          <Link
-            href="/gallery"
-            target="_blank"
-            className="text-blue-500 hover:underline inline-block"
-          >
-            Xem Gallery ảnh
-          </Link>
-        </div>
-
         <p className="block mt-4">
           <span className="text-base">
             Powered by{" "}
@@ -186,6 +176,16 @@ const ImageGenerator = () => {
             </a>
           </span>
         </p>
+
+        <div className="max-w-xl mx-auto text-center my-4">
+          <Link
+            href="/gallery"
+            target="_blank"
+            className="text-blue-500 hover:underline inline-block"
+          >
+            Xem Gallery ảnh
+          </Link>
+        </div>
       </div>
     </div>
   );
