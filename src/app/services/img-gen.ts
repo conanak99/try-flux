@@ -31,7 +31,7 @@ const getImageDimensions = (
   }
 };
 
-async function callAPI(prompt: string, imageSize: string) {
+async function callAPI(prompt: string, imageSize: ImageSize) {
   await init();
 
   const { width, height } = getImageDimensions(imageSize);

@@ -1,4 +1,5 @@
 import { getImages } from "@/app/services/image-store";
+import { ImageSize } from "@/app/types";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
