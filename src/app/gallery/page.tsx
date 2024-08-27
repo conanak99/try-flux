@@ -25,13 +25,13 @@ export default async function GalleryPage() {
       </Link>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {images.map((image, index) => (
-          <div key={index} className="relative aspect-square">
+          <div key={index} className="relative aspect-[3/4]">
             <img
               src={getImageUrl(image.image)}
               alt={image.prompt}
               className="w-full h-full object-contain object-top"
             />
-            <div className="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white p-1 text-xs max-w-[90%] line-clamp-4 cursor-pointer">
+            <div className="absolute top-2 right-2 bg-black bg-opacity-50 text-white p-1 text-xs max-w-[80%] line-clamp-3">
               {image.prompt}
             </div>
           </div>
