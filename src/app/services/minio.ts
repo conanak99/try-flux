@@ -22,5 +22,6 @@ export async function uploadToMinio(
   // Just upload, don't wait for it to finish
   minioClient.putObject(bucketName, fileName, Buffer.from(buffer));
 
-  return `http://${endPoint}/${bucketName}/${fileName}`;
+  // Use wsrv.nl to get the image url work in http lol
+  return `//wsrv.nl/?url=${endPoint}/${bucketName}/${fileName}`;
 }
