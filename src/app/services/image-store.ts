@@ -13,6 +13,6 @@ export async function addImage(url: string, prompt: string, size: ImageSize) {
 export async function getImages() {
   return await db.query.history.findMany({
     orderBy: desc(dbSchema.history.createdAt),
-    limit: 50
+    limit: 100
   });
 }
