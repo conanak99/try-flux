@@ -17,6 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>{children}</body>
+      <script
+        defer
+        data-domain="ai.codedao.cc"
+        src="https://analytics.codedao.cc/js/script.js"
+      ></script>
     </html>
   );
 }
