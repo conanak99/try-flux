@@ -10,6 +10,7 @@ import { retryFunc } from "@/app/services/helper";
 import { addImage } from "@/app/services/image-store";
 import { uploadToMinio } from "@/app/services/minio";
 import { ImageSize } from "@/app/types";
+import { translateWithBing } from "@/app/services/bing-translate";
 
 function IP() {
   const FALLBACK_IP_ADDRESS = "0.0.0.0";
@@ -32,7 +33,7 @@ export async function generateImage(prompt: string, imageSize: ImageSize, transl
     let translationModel = "none";
 
     if (translatePrompt) {
-      const translateResult = (await retryFunc(() => translate(prompt))) || {
+      const translateResult = (await retryFunc(() => translateWithBing(prompt))) || {
         translatedText: prompt,
         model: "unknown",
       };
