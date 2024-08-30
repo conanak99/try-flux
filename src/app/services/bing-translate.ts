@@ -36,7 +36,7 @@ export async function translateWithBing(text: string) {
       };
     },
     {
-      ttl: "10m", // Cache translated text for 10 minutes
+      ttl: "15m",
     }
   );
 }

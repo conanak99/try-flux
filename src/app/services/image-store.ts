@@ -21,7 +21,7 @@ export async function getImages() {
   return await bento.getOrSet(RECENT_IMAGES_KEY, async () => {
     return await db.query.history.findMany({
       orderBy: desc(dbSchema.history.createdAt),
-      limit: 100
+      limit: 120
     });
   }, {ttl: '10m'});
 }
