@@ -6,7 +6,9 @@ import { desc } from "drizzle-orm";
 const RECENT_IMAGES_KEY = "recent-images";
 
 export async function addImage(url: string, prompt: string, size: ImageSize) {
-  if (containsNSFWorCSAM(prompt)) {
+  // Remove specified punctuation from prompt
+  const cleanedPrompt = prompt.replace(/[.?:,_:!]/g, "");
+  if (containsNSFWorCSAM(cleanedPrompt)) {
     console.warn("containsNSFWorCSAM, skip adding this to DB", prompt);
     return;
   }
@@ -57,20 +59,32 @@ const nsfwKeywords = [
   "fetish",
   "penis",
   "vagina",
+  "naked",
   "pussy",
   "fuck",
+  "18",
 
   "khiêu dâm",
   "tình dục",
   "khoả thân",
+  "diễn viên",
   "khỏa thân",
+  "không mặt",
+  "không mặc",
+  "quần áo",
+  "sinh dục",
+  "cởi",
+  "hở",
+  "vú",
   "dâm dục",
   "địt",
   "chịch",
+  "mông",
   "làm tình",
   "bướm",
   "lồn",
   "dâm",
+  "quần",
 ];
 
 const csamKeywords = [
