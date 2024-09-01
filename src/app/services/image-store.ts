@@ -55,6 +55,10 @@ const nsfwKeywords = [
   "xxx",
   "erotic",
   "fetish",
+  "penis",
+  "vagina",
+  "pussy",
+  "fuck",
 
   "khiêu dâm",
   "tình dục",
@@ -64,6 +68,7 @@ const nsfwKeywords = [
   "địt",
   "chịch",
   "làm tình",
+  "bướm",
   "lồn",
   "dâm",
 ];
