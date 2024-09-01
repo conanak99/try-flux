@@ -61,6 +61,9 @@ const nsfwKeywords = [
   "khoả thân",
   "khỏa thân",
   "dâm dục",
+  "địt",
+  "chịch",
+  "làm tình",
   "lồn",
   "dâm",
 ];
