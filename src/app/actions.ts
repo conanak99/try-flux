@@ -7,7 +7,7 @@ import { imgGenService } from "@/app/services/img-gen";
 import { translate } from "@/app/services/text-gen";
 import { limiter } from "@/app/services/rate-limit";
 import { retryFunc } from "@/app/services/helper";
-import { addImage } from "@/app/services/image-store";
+import { addImage, shouldAddImage } from "@/app/services/image-store";
 import { uploadToMinio } from "@/app/services/minio";
 import { ImageSize } from "@/app/types";
 import { translateWithBing } from "@/app/services/bing-translate";
@@ -23,7 +23,11 @@ function IP() {
   return headers().get("x-real-ip") ?? FALLBACK_IP_ADDRESS;
 }
 
-export async function generateImage(prompt: string, imageSize: ImageSize, translatePrompt: boolean) {
+export async function generateImage(
+  prompt: string,
+  imageSize: ImageSize,
+  translatePrompt: boolean
+) {
   const ipAddress = IP();
 
   try {
@@ -33,7 +37,9 @@ export async function generateImage(prompt: string, imageSize: ImageSize, transl
     let translationModel = "none";
 
     if (translatePrompt) {
-      const translateResult = (await retryFunc(() => translateWithBing(prompt))) || {
+      const translateResult = (await retryFunc(() =>
+        translateWithBing(prompt)
+      )) || {
         translatedText: prompt,
         model: "unknown",
       };
@@ -46,10 +52,13 @@ export async function generateImage(prompt: string, imageSize: ImageSize, transl
     );
 
     if (imgUrl) {
-      // Add this line to store the generated image
-      uploadImageToMinio(imgUrl).then(minioUrl => {
-        addImage(minioUrl, prompt, imageSize);
-      });
+      if (shouldAddImage(prompt)) {
+        uploadImageToMinio(imgUrl).then((minioUrl) => {
+          addImage(minioUrl, prompt, imageSize);
+        });
+      } else {
+        console.warn("skip adding this to DB", { prompt, imgUrl });
+      }
 
       console.log({
         ipAddress,
@@ -101,7 +110,9 @@ export async function generateImage(prompt: string, imageSize: ImageSize, transl
 }
 
 async function uploadImageToMinio(imageUrl: string) {
-  const fileName = imageUrl.split('/').pop() || `${Date.now()}-${Math.random().toString(36).substring(7)}.png`;
+  const fileName =
+    imageUrl.split("/").pop() ||
+    `${Date.now()}-${Math.random().toString(36).substring(7)}.png`;
   const minioUrl = await uploadToMinio(imageUrl, fileName);
   return minioUrl;
 }

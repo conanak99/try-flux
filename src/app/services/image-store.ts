@@ -5,11 +5,17 @@ import { desc } from "drizzle-orm";
 
 const RECENT_IMAGES_KEY = "recent-images";
 
-export async function addImage(url: string, prompt: string, size: ImageSize) {
-  // Remove specified punctuation from prompt
+export function shouldAddImage(prompt: string): boolean {
   const cleanedPrompt = prompt.replace(/[.?:,_:!]/g, "");
   if (containsNSFWorCSAM(cleanedPrompt)) {
     console.warn("containsNSFWorCSAM, skip adding this to DB", prompt);
+    return false;
+  }
+  return true;
+}
+
+export async function addImage(url: string, prompt: string, size: ImageSize) {
+  if (!shouldAddImage(prompt)) {
     return;
   }
 
