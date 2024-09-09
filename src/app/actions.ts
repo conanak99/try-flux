@@ -1,26 +1,26 @@
-"use server";
+'use server';
 
-import { headers } from "next/headers";
-import { RateLimiterRes } from "rate-limiter-flexible";
+import { headers } from 'next/headers';
+import { RateLimiterRes } from 'rate-limiter-flexible';
 
-import { imgGenService } from "@/app/services/img-gen";
-import { translate } from "@/app/services/text-gen";
-import { limiter } from "@/app/services/rate-limit";
-import { retryFunc } from "@/app/services/helper";
-import { addImage, shouldAddImage } from "@/app/services/image-store";
-import { uploadToMinio } from "@/app/services/minio";
-import { ImageSize } from "@/app/types";
-import { translateWithBing } from "@/app/services/bing-translate";
+import { translateWithBing } from '@/app/services/bing-translate';
+import { retryFunc } from '@/app/services/helper';
+import { addImage, shouldAddImage } from '@/app/services/image-store';
+import { imgGenService } from '@/app/services/img-gen';
+import { uploadToMinio } from '@/app/services/minio';
+import { limiter } from '@/app/services/rate-limit';
+import { translate } from '@/app/services/text-gen';
+import { ImageSize } from '@/app/types';
 
 function IP() {
-  const FALLBACK_IP_ADDRESS = "0.0.0.0";
-  const forwardedFor = headers().get("x-forwarded-for");
+  const FALLBACK_IP_ADDRESS = '0.0.0.0';
+  const forwardedFor = headers().get('x-forwarded-for');
 
   if (forwardedFor) {
-    return forwardedFor.split(",")[0] ?? FALLBACK_IP_ADDRESS;
+    return forwardedFor.split(',')[0] ?? FALLBACK_IP_ADDRESS;
   }
 
-  return headers().get("x-real-ip") ?? FALLBACK_IP_ADDRESS;
+  return headers().get('x-real-ip') ?? FALLBACK_IP_ADDRESS;
 }
 
 export async function generateImage(
@@ -34,14 +34,14 @@ export async function generateImage(
     await limiter.consume(ipAddress, 1);
 
     let translatedPrompt = prompt;
-    let translationModel = "none";
+    let translationModel = 'none';
 
     if (translatePrompt) {
       const translateResult = (await retryFunc(() =>
         translateWithBing(prompt)
       )) || {
         translatedText: prompt,
-        model: "unknown",
+        model: 'unknown',
       };
       translatedPrompt = translateResult.translatedText;
       translationModel = translateResult.model;
@@ -57,7 +57,7 @@ export async function generateImage(
           addImage(minioUrl, prompt, imageSize);
         });
       } else {
-        console.warn("skip adding this to DB", { prompt, imgUrl });
+        console.warn('skip adding this to DB', { prompt, imgUrl });
       }
 
       console.log({
@@ -74,11 +74,11 @@ export async function generateImage(
     }
 
     return {
-      error: "Failed to generate image",
+      error: 'Failed to generate image',
       imgUrl: null,
     };
   } catch (e: any) {
-    if (typeof e === "string") {
+    if (typeof e === 'string') {
       console.error({
         ipAddress,
         prompt,
@@ -90,7 +90,7 @@ export async function generateImage(
       };
     }
 
-    if ("msBeforeNext" in e) {
+    if ('msBeforeNext' in e) {
       console.warn(`Rate limit exceeded for ${ipAddress}!`);
       const res: RateLimiterRes = e as RateLimiterRes;
 
@@ -111,7 +111,7 @@ export async function generateImage(
 
 async function uploadImageToMinio(imageUrl: string) {
   const fileName =
-    imageUrl.split("/").pop() ||
+    imageUrl.split('/').pop() ||
     `${Date.now()}-${Math.random().toString(36).substring(7)}.png`;
   const minioUrl = await uploadToMinio(imageUrl, fileName);
   return minioUrl;

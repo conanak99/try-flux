@@ -1,14 +1,15 @@
-import { bento } from "@/app/services/cache";
-import { ImageSize } from "@/app/types";
-import { db, dbSchema } from "@/db";
-import { desc } from "drizzle-orm";
+import { desc } from 'drizzle-orm';
 
-const RECENT_IMAGES_KEY = "recent-images";
+import { bento } from '@/app/services/cache';
+import { ImageSize } from '@/app/types';
+import { db, dbSchema } from '@/db';
+
+const RECENT_IMAGES_KEY = 'recent-images';
 
 export function shouldAddImage(prompt: string): boolean {
-  const cleanedPrompt = prompt.replace(/[.?:,_:!]/g, "");
+  const cleanedPrompt = prompt.replace(/[.?:,_:!]/g, '');
   if (containsNSFWorCSAM(cleanedPrompt)) {
-    console.warn("containsNSFWorCSAM, skip adding this to DB", prompt);
+    console.warn('containsNSFWorCSAM, skip adding this to DB', prompt);
     return false;
   }
   return true;
@@ -26,7 +27,7 @@ export async function addImage(url: string, prompt: string, size: ImageSize) {
     (image) => image.prompt.trim().toLowerCase() === prompt.trim().toLowerCase()
   ).length;
   if (duplicatedPromptCount > 5) {
-    console.log("prompt count > 5, skip adding this to DB", prompt);
+    console.log('prompt count > 5, skip adding this to DB', prompt);
     return;
   }
 
@@ -37,7 +38,7 @@ export async function addImage(url: string, prompt: string, size: ImageSize) {
   });
 
   bento.delete(RECENT_IMAGES_KEY).then((val) => {
-    console.log("cache deleted", { val });
+    console.log('cache deleted', { val });
   });
 }
 
@@ -50,61 +51,61 @@ export async function getImages() {
         limit: 120,
       });
     },
-    { ttl: "10m" }
+    { ttl: '10m' }
   );
 }
 
 const nsfwKeywords = [
-  "nsfw",
-  "adult",
-  "porn",
-  "sex",
-  "nude",
-  "xxx",
-  "erotic",
-  "fetish",
-  "penis",
-  "vagina",
-  "naked",
-  "cock",
-  "pussy",
-  "fuck",
-  "18",
+  'nsfw',
+  'adult',
+  'porn',
+  'sex',
+  'nude',
+  'xxx',
+  'erotic',
+  'fetish',
+  'penis',
+  'vagina',
+  'naked',
+  'cock',
+  'pussy',
+  'fuck',
+  '18',
 
-  "khiêu dâm",
-  "tình dục",
-  "khoả thân",
-  "diễn viên",
-  "khỏa thân",
-  "không mặt",
-  "không mặc",
-  "sinh dục",
-  "cởi",
-  "hở",
-  "vú",
-  "dâm dục",
-  "địt",
-  "chịch",
-  "mông",
-  "làm tình",
-  "bướm",
-  "âm hộ",
-  "âm đạo",
-  "lồn",
-  "dâm",
-  "quần",
+  'khiêu dâm',
+  'tình dục',
+  'khoả thân',
+  'diễn viên',
+  'khỏa thân',
+  'không mặt',
+  'không mặc',
+  'sinh dục',
+  'cởi',
+  'hở',
+  'vú',
+  'dâm dục',
+  'địt',
+  'chịch',
+  'mông',
+  'làm tình',
+  'bướm',
+  'âm hộ',
+  'âm đạo',
+  'lồn',
+  'dâm',
+  'quần',
 ];
 
 const csamKeywords = [
-  "child",
-  "abuse",
-  "exploitation",
-  "trẻ em",
-  "em bé",
-  "lạm dụng",
-  "bóc lột",
-  "bé gái",
-  "tuổi",
+  'child',
+  'abuse',
+  'exploitation',
+  'trẻ em',
+  'em bé',
+  'lạm dụng',
+  'bóc lột',
+  'bé gái',
+  'tuổi',
 ];
 
 function containsNSFWorCSAM(prompt: string): boolean {

@@ -1,7 +1,8 @@
-import { ImageSize } from "@/app/types";
-import { config } from "@/config";
-import { RunwareServer } from "@runware/sdk-js";
-import delay from "delay";
+import { RunwareServer } from '@runware/sdk-js';
+import delay from 'delay';
+
+import { ImageSize } from '@/app/types';
+import { config } from '@/config';
 
 const runware = new RunwareServer({
   apiKey: config.runwareApiKey,
@@ -21,11 +22,11 @@ const getImageDimensions = (
   imageSize: ImageSize
 ): { width: number; height: number } => {
   switch (imageSize) {
-    case "landscape":
+    case 'landscape':
       return { width: 1024, height: 512 };
-    case "portrait":
+    case 'portrait':
       return { width: 512, height: 1024 };
-    case "square":
+    case 'square':
     default:
       return { width: 640, height: 640 };
   }
@@ -40,7 +41,7 @@ async function callAPI(prompt: string, imageSize: ImageSize) {
     positivePrompt: prompt,
     width,
     height,
-    model: "runware:100@1",
+    model: 'runware:100@1',
   });
 
   return response?.[0].imageURL;

@@ -1,24 +1,25 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { generateImage as genImg } from "@/app/actions";
-import Link from "next/link";
-import { ImageSize } from "@/app/types";
+import Link from 'next/link';
+import { useState } from 'react';
+
+import { generateImage as genImg } from '@/app/actions';
+import { ImageSize } from '@/app/types';
 
 const ImageGenerator = () => {
-  const [prompt, setPrompt] = useState("");
-  const [error, setError] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const [prompt, setPrompt] = useState('');
+  const [error, setError] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [imageSize, setImageSize] = useState<ImageSize>("square");
+  const [imageSize, setImageSize] = useState<ImageSize>('square');
   const [translatePrompt, setTranslatePrompt] = useState(true);
 
   const generateImage = async () => {
-    if (prompt.trim() === "") return;
+    if (prompt.trim() === '') return;
     if (isLoading) return;
 
     setIsLoading(true);
-    setError("");
+    setError('');
 
     const { imgUrl, error: genError } = await genImg(
       prompt,
@@ -28,7 +29,7 @@ const ImageGenerator = () => {
     console.log({ imgUrl, genError });
 
     if (genError || !imgUrl) {
-      setError(genError ?? "Lâu lâu bị lỗi. Thử lại nha bạn ei!!!");
+      setError(genError ?? 'Lâu lâu bị lỗi. Thử lại nha bạn ei!!!');
       setIsLoading(false);
       return;
     }
@@ -57,7 +58,7 @@ const ImageGenerator = () => {
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter") {
+              if (e.key === 'Enter') {
                 e.preventDefault();
                 generateImage();
               }
@@ -77,7 +78,7 @@ const ImageGenerator = () => {
                 className="form-radio"
                 name="imageSize"
                 value="square"
-                checked={imageSize === "square"}
+                checked={imageSize === 'square'}
                 onChange={(e) => setImageSize(e.target.value as ImageSize)}
               />
               <span className="ml-2">Vuông</span>
@@ -88,7 +89,7 @@ const ImageGenerator = () => {
                 className="form-radio"
                 name="imageSize"
                 value="landscape"
-                checked={imageSize === "landscape"}
+                checked={imageSize === 'landscape'}
                 onChange={(e) => setImageSize(e.target.value as ImageSize)}
               />
               <span className="ml-2">Ngang</span>
@@ -99,7 +100,7 @@ const ImageGenerator = () => {
                 className="form-radio"
                 name="imageSize"
                 value="portrait"
-                checked={imageSize === "portrait"}
+                checked={imageSize === 'portrait'}
                 onChange={(e) => setImageSize(e.target.value as ImageSize)}
               />
               <span className="ml-2">Dọc</span>
@@ -152,7 +153,7 @@ const ImageGenerator = () => {
 
       <div className="max-w-xl mx-auto text-center mt-8">
         <p className="text-base">
-          Nếu bạn muốn học code app tương tự, nhớ để lại thông tin tại{" "}
+          Nếu bạn muốn học code app tương tự, nhớ để lại thông tin tại{' '}
           <a
             href="https://bit.ly/ai-codedao"
             target="_blank"
@@ -160,13 +161,13 @@ const ImageGenerator = () => {
             className="text-[#B388FF] font-bold cursor-pointer"
           >
             bit.ly/ai-codedao
-          </a>{" "}
+          </a>{' '}
           nha!
         </p>
 
         <p className="block mt-4">
           <span className="text-base">
-            Powered by{" "}
+            Powered by{' '}
             <a
               href="https://runware.ai/"
               target="_blank"

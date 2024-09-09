@@ -1,9 +1,9 @@
-import { config } from "@/config";
-import { bento } from "@/app/services/cache";
+import { bento } from '@/app/services/cache';
+import { config } from '@/config';
 
 const BING_TRANSLATE_ENDPOINT =
-  "https://api.cognitive.microsofttranslator.com/translate";
-const BING_TRANSLATE_CACHE_KEY = "bing-translate";
+  'https://api.cognitive.microsofttranslator.com/translate';
+const BING_TRANSLATE_CACHE_KEY = 'bing-translate';
 
 export async function translateWithBing(text: string) {
   const cacheKey = `${BING_TRANSLATE_CACHE_KEY}:${text}`;
@@ -14,11 +14,11 @@ export async function translateWithBing(text: string) {
       const response = await fetch(
         `${BING_TRANSLATE_ENDPOINT}?api-version=3.0&to=en`,
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Ocp-Apim-Subscription-Key": config.bingApiKey,
-            "Ocp-Apim-Subscription-Region": "eastasia",
-            "Content-Type": "application/json",
+            'Ocp-Apim-Subscription-Key': config.bingApiKey,
+            'Ocp-Apim-Subscription-Region': 'eastasia',
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify([{ Text: text }]),
         }
@@ -32,11 +32,11 @@ export async function translateWithBing(text: string) {
       const data = await response.json();
       return {
         translatedText: data[0].translations[0].text as string,
-        model: "bing",
+        model: 'bing',
       };
     },
     {
-      ttl: "15m",
+      ttl: '15m',
     }
   );
 }

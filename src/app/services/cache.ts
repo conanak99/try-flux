@@ -1,8 +1,8 @@
-import { BentoCache, bentostore } from "bentocache";
-import { memoryDriver } from "bentocache/drivers/memory";
+import { BentoCache, bentostore } from 'bentocache';
+import { memoryDriver } from 'bentocache/drivers/memory';
 
 export const bento = new BentoCache({
-  default: "cache",
+  default: 'cache',
   stores: {
     // A first cache store named "cache" using
     // only L1 in-memory cache

@@ -1,13 +1,14 @@
-import { bento } from "@/app/services/cache";
-import { config } from "@/config";
-import Groq from "groq-sdk";
+import Groq from 'groq-sdk';
+
+import { bento } from '@/app/services/cache';
+import { config } from '@/config';
 
 const API_KEYS = config.groqApiKeys;
 const MODELS = [
-  "gemma2-9b-it",
+  'gemma2-9b-it',
   // "gemma-7b-it",
-  "llama3-8b-8192",
-  "llama-3.1-70b-versatile",
+  'llama3-8b-8192',
+  'llama-3.1-70b-versatile',
 ];
 
 const getKey = () => {
@@ -46,7 +47,7 @@ export const _translate = async (text: string) => {
     const result = await groq.chat.completions.create({
       messages: [
         {
-          role: "user",
+          role: 'user',
           content: getPrompt(text),
         },
       ],
@@ -55,9 +56,9 @@ export const _translate = async (text: string) => {
 
     const translatedText =
       result.choices[0].message.content
-        ?.replaceAll("Here is the translation", "")
-        ?.replaceAll("here is the translation", "")
-        ?.replaceAll("`", "")
+        ?.replaceAll('Here is the translation', '')
+        ?.replaceAll('here is the translation', '')
+        ?.replaceAll('`', '')
         ?.trim() ?? text;
 
     return { translatedText, model };
@@ -71,6 +72,6 @@ export const translate = async (text: string) => {
   const key = `translate:${text.toLowerCase().trim()}`;
 
   return bento.getOrSet(key, async () => await _translate(text), {
-    ttl: "10m", // Cache translated text for 10 minutes
+    ttl: '10m', // Cache translated text for 10 minutes
   });
 };

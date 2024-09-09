@@ -1,12 +1,13 @@
-import { getImages } from "@/app/services/image-store";
-import { ImageSize } from "@/app/types";
-import Link from "next/link";
+import Link from 'next/link';
 
-export const dynamic = "force-dynamic";
+import { getImages } from '@/app/services/image-store';
+import { ImageSize } from '@/app/types';
+
+export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 const getImageUrl = (imageUrl: string) => {
-  if (imageUrl.startsWith("http")) {
+  if (imageUrl.startsWith('http')) {
     return `//wsrv.nl/?url=${imageUrl}`;
   }
   return imageUrl;
@@ -14,12 +15,12 @@ const getImageUrl = (imageUrl: string) => {
 
 const getImageRatio = (size: ImageSize) => {
   switch (size) {
-    case "square":
-      return "aspect-square row-span-2";
-    case "portrait":
-      return "aspect-[1/2] row-span-4";
-    case "landscape":
-      return "aspect-[2/1] row-span-1";
+    case 'square':
+      return 'aspect-square row-span-2';
+    case 'portrait':
+      return 'aspect-[1/2] row-span-4';
+    case 'landscape':
+      return 'aspect-[2/1] row-span-1';
   }
 };
 export default async function GalleryPage() {
