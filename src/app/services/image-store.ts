@@ -60,6 +60,7 @@ const nsfwKeywords = [
   "penis",
   "vagina",
   "naked",
+  "cock",
   "pussy",
   "fuck",
   "18",
