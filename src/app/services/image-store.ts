@@ -6,28 +6,30 @@ import { db, dbSchema } from '@/db';
 
 const RECENT_IMAGES_KEY = 'recent-images';
 
-export function shouldAddImage(prompt: string): boolean {
+export const shouldAddImage = async (prompt: string): Promise<boolean> => {
   const cleanedPrompt = prompt.replace(/[.?:,_:!]/g, '');
   if (containsNSFWorCSAM(cleanedPrompt)) {
     console.warn('containsNSFWorCSAM, skip adding this to DB', prompt);
     return false;
   }
-  return true;
-}
-
-export async function addImage(url: string, prompt: string, size: ImageSize) {
-  if (!shouldAddImage(prompt)) {
-    return;
-  }
 
   const images = await getImages();
 
+  const trimmedPrompt = prompt.trim().toLowerCase();
   const recentImages = images.slice(0, 30);
   const duplicatedPromptCount = recentImages.filter(
-    (image) => image.prompt.trim().toLowerCase() === prompt.trim().toLowerCase()
+    (image) => image.prompt.trim().toLowerCase() === trimmedPrompt
   ).length;
   if (duplicatedPromptCount > 5) {
     console.log('prompt count > 5, skip adding this to DB', prompt);
+    return false;
+  }
+
+  return true;
+};
+
+export async function addImage(url: string, prompt: string, size: ImageSize) {
+  if (!shouldAddImage(prompt)) {
     return;
   }
 
@@ -36,10 +38,6 @@ export async function addImage(url: string, prompt: string, size: ImageSize) {
     image: url,
     size,
   });
-
-  // bento.delete(RECENT_IMAGES_KEY).then((val) => {
-  //   console.log('cache deleted', { val });
-  // });
 }
 
 export async function getImages() {

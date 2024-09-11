@@ -121,6 +121,7 @@ const ImageGenerator = () => {
         <button
           onClick={generateImage}
           disabled={isLoading}
+          data-umami-event="generate-image"
           className="w-full rounded-md bg-blue-500 px-4 py-2 text-white transition duration-300 hover:bg-blue-600"
         >
           Tạo ảnh
@@ -158,6 +159,7 @@ const ImageGenerator = () => {
             href="https://bit.ly/ai-codedao"
             target="_blank"
             rel="noopener noreferrer"
+            data-umami-event="view-course"
             className="text-[#B388FF] font-bold cursor-pointer"
           >
             bit.ly/ai-codedao
