@@ -16,12 +16,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
-      <script
-        defer
-        src="https://umami.codedao.cc/script.js"
-        data-website-id="2453a241-dac1-4370-8a63-1e03e729df91"
-      ></script>
+      <body className={inter.className}>
+        {children}
+        <script
+          defer
+          src="https://umami.codedao.cc/script.js"
+          data-website-id="2453a241-dac1-4370-8a63-1e03e729df91"
+        ></script>
+      </body>
     </html>
   );
 }
