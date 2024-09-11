@@ -19,8 +19,8 @@ export default function RootLayout({
       <body className={inter.className}>{children}</body>
       <script
         defer
-        data-domain="ai.codedao.cc"
-        src="https://analytics.codedao.cc/js/script.js"
+        src="https://umami.codedao.cc/script.js"
+        data-website-id="2453a241-dac1-4370-8a63-1e03e729df91"
       ></script>
     </html>
   );
