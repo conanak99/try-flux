@@ -11,7 +11,7 @@ const minioClient = new Client({
   useSSL: true,
 });
 
-export async function uploadToMinio(
+async function uploadToMinio(
   imageUrl: string,
   fileName: string
 ): Promise<string> {
@@ -24,4 +24,12 @@ export async function uploadToMinio(
     .catch((error) => console.error('Error uploading to Minio:', error));
 
   return `https://${endPoint}/${bucketName}/${fileName}`;
+}
+
+export async function uploadImageToMinio(imageUrl: string) {
+  const fileName =
+    imageUrl.split('/').pop() ||
+    `${Date.now()}-${Math.random().toString(36).substring(7)}.png`;
+  const minioUrl = await uploadToMinio(imageUrl, fileName);
+  return minioUrl;
 }

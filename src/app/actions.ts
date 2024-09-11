@@ -7,9 +7,8 @@ import { translateWithBing } from '@/app/services/bing-translate';
 import { retryFunc } from '@/app/services/helper';
 import { addImage, shouldAddImage } from '@/app/services/image-store';
 import { imgGenService } from '@/app/services/img-gen';
-import { uploadToMinio } from '@/app/services/minio';
+import { uploadImageToMinio } from '@/app/services/minio';
 import { limiter } from '@/app/services/rate-limit';
-import { translate } from '@/app/services/text-gen';
 import { ImageSize } from '@/app/types';
 
 function IP() {
@@ -52,13 +51,11 @@ export async function generateImage(
     );
 
     if (imgUrl) {
-      if (await shouldAddImage(prompt)) {
-        uploadImageToMinio(imgUrl).then((minioUrl) => {
-          addImage(minioUrl, prompt, imageSize);
-        });
-      } else {
-        console.warn('skip adding this to DB', { prompt, imgUrl });
-      }
+      addImageToLog(prompt, imgUrl, imageSize).then((result) => {
+        if (!result) {
+          console.warn('skip adding this to DB', { prompt, imgUrl });
+        }
+      });
 
       console.log({
         ipAddress,
@@ -109,10 +106,16 @@ export async function generateImage(
   }
 }
 
-async function uploadImageToMinio(imageUrl: string) {
-  const fileName =
-    imageUrl.split('/').pop() ||
-    `${Date.now()}-${Math.random().toString(36).substring(7)}.png`;
-  const minioUrl = await uploadToMinio(imageUrl, fileName);
-  return minioUrl;
+async function addImageToLog(
+  prompt: string,
+  imgUrl: string,
+  imageSize: ImageSize
+) {
+  if (await shouldAddImage(prompt)) {
+    const minioUrl = await uploadImageToMinio(imgUrl);
+    await addImage(minioUrl, prompt, imageSize);
+    return true;
+  }
+
+  return false;
 }
