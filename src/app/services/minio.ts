@@ -8,7 +8,7 @@ const minioClient = new Client({
   endPoint,
   accessKey,
   secretKey,
-  useSSL: false,
+  useSSL: true,
 });
 
 export async function uploadToMinio(
@@ -23,5 +23,5 @@ export async function uploadToMinio(
     })
     .catch((error) => console.error('Error uploading to Minio:', error));
 
-  return `http://${endPoint}/${bucketName}/${fileName}`;
+  return `https://${endPoint}/${bucketName}/${fileName}`;
 }

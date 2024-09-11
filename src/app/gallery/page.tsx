@@ -7,9 +7,9 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 const getImageUrl = (imageUrl: string) => {
-  if (imageUrl.startsWith('http')) {
-    return `//wsrv.nl/?url=${imageUrl}`;
-  }
+  // if (imageUrl.startsWith('http')) {
+  //   return `//wsrv.nl/?url=${imageUrl}`;
+  // }
   return imageUrl;
 };
 
