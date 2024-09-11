@@ -37,9 +37,9 @@ export async function addImage(url: string, prompt: string, size: ImageSize) {
     size,
   });
 
-  bento.delete(RECENT_IMAGES_KEY).then((val) => {
-    console.log('cache deleted', { val });
-  });
+  // bento.delete(RECENT_IMAGES_KEY).then((val) => {
+  //   console.log('cache deleted', { val });
+  // });
 }
 
 export async function getImages() {
@@ -48,7 +48,7 @@ export async function getImages() {
     async () => {
       return await db.query.history.findMany({
         orderBy: desc(dbSchema.history.createdAt),
-        limit: 120,
+        limit: 100,
       });
     },
     { ttl: '10m' }
