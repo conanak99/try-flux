@@ -52,7 +52,7 @@ export async function generateImage(
     );
 
     if (imgUrl) {
-      if (shouldAddImage(prompt)) {
+      if (await shouldAddImage(prompt)) {
         uploadImageToMinio(imgUrl).then((minioUrl) => {
           addImage(minioUrl, prompt, imageSize);
         });
